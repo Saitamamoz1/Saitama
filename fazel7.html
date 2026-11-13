@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 سیستم فوق امنیتی ناموس فاضل v5.0 🔥</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700;900&display=swap');
+
+        :root {
+            --gold: #d4af37;
+            --gold-light: #ffdf00;
+            --dark: #050505;
+            --card-bg: #121212;
+            --red: #ff4747;
+            --green: #00ff88;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
+        
+        body {
+            background-color: var(--dark);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000 70%);
+        }
+
+        /* ========== انیمیشن ها ========== */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideMarquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes glowPulse { 0% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); } 50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); } 100% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); } }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes borderGlow { 0% { border-color: rgba(212, 175, 55, 0.3); } 50% { border-color: rgba(212, 175, 55, 1); } 100% { border-color: rgba(212, 175, 55, 0.3); } }
+
+        /* ========== صفحه ورود ========== */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            z-index: 1000; transition: opacity 0.6s ease;
+        }
+        .card-login {
+            width: 380px; height: 520px;
+            background: linear-gradient(135deg, #1f2b4c 0%, #0d1222 100%);
+            border-radius: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 1px solid rgba(255,255,255,0.05); animation: fadeIn 1s ease;
+            position: relative; overflow: hidden;
+        }
+        
+        .card-login::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .logo-box { 
+            width: 55px; height: 85px; border: 4px solid var(--gold); 
+            border-radius: 8px; margin-bottom: 30px; background: rgba(0,0,0,0.3); 
+            animation: glowPulse 3s infinite; display: flex; justify-content: center; align-items: center;
+            font-size: 40px; font-weight: 900; color: var(--gold); z-index: 2;
+        }
+        .main-name { font-size: 50px; font-weight: 900; margin-bottom: 10px; color: #fff; text-shadow: 0 4px 20px rgba(255,255,255,0.2); z-index: 2; }
+        .sub-name { font-size: 18px; color: #8b9bb4; margin-bottom: 60px; z-index: 2; }
+        .login-btn {
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            color: #000; border: none; padding: 15px 50px; font-size: 20px; font-weight: 900; border-radius: 50px;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(212,175,55,0.4); z-index: 2;
+        }
+        .login-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(212,175,55,0.8); }
+
+        /* ========== فروشگاه ========== */
+        #shop-screen { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; width: 100%; animation: fadeIn 0.8s ease; }
+
+        /* نوار ابزار بالا */
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px);
+            padding: 15px 30px; border-radius: 15px; border: 1px solid #333;
+            margin-bottom: 20px; position: sticky; top: 10px; z-index: 100;
+            animation: fadeIn 1s ease;
+        }
+        .top-bar h1 { font-size: 20px; color: var(--gold); }
+        .cart-icon { background: #222; padding: 10px 20px; border-radius: 10px; border: 1px solid #444; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .cart-icon:hover { border-color: var(--gold); }
+        .cart-icon span { background: var(--red); color: #fff; padding: 2px 8px; border-radius: 50%; font-size: 12px; font-weight: 700; }
+
+        /* تیکر خبری */
+        .news-ticker {
+            width: 100%; overflow: hidden; background: linear-gradient(90deg, #1a0000, #2b0000, #1a0000); 
+            border: 1px solid var(--red); border-radius: 10px; padding: 10px; margin-bottom: 30px; white-space: nowrap;
+            box-shadow: 0 0 20px rgba(255, 71, 71, 0.2);
+        }
+        .news-ticker p { color: var(--red); font-weight: 700; font-size: 15px; display: inline-block; animation: slideMarquee 20s linear infinite; }
+
+        /* داشبورد آماری */
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-box { 
+            background: linear-gradient(145deg, #151515, #0a0a0a); border: 1px solid #333; 
+            padding: 25px; border-radius: 15px; text-align: center; position: relative; overflow: hidden;
+            transition: 0.3s;
+        }
+        .stat-box:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .stat-box::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--gold); opacity: 0.5; }
+        .stat-box h3 { font-size: 14px; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-box p { font-size: 28px; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .stat-box.red p { color: var(--red); text-shadow: 0 0 10px rgba(255,71,71,0.3); }
+        .stat-box.gold p { color: var(--gold); text-shadow: 0 0 10px rgba(212,175,55,0.3); }
+        .stat-box.green p { color: var(--green); text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+
+        /* جستجو */
+        .search-container { width: 100%; max-width: 800px; margin: 0 auto 40px auto; position: relative; }
+        .search-input { 
+            width: 100%; padding: 18px 25px; background: #111; border: 2px solid #333; 
+            border-radius: 50px; color: #fff; font-size: 16px; outline: none; transition: 0.3s; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        .search-input:focus { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.2), inset 0 0 10px rgba(0,0,0,0.5); }
+
+        /* گرید محصولات */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        .product-card {
+            background: linear-gradient(145deg, var(--card-bg), #080808); border: 1px solid #222; border-radius: 20px;
+            padding: 30px; position: relative; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .product-card:hover { border-color: var(--gold); transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 60px rgba(212, 175, 55, 0.15); }
+        .product-card::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            transition: 0.4s;
+        }
+        .product-card:hover::before { transform: scale(1.5); }
+
+        .tag { position: absolute; top: 20px; left: 20px; background: rgba(255, 71, 71, 0.1); color: var(--red); padding: 5px 15px; border-radius: 20px; font-size: 12px; border: 1px solid var(--red); font-weight: 700; }
+        .tag.gold-tag { background: rgba(212, 175, 55, 0.1); color: var(--gold); border-color: var(--gold); }
+        .tag.green-tag { background: rgba(0, 255, 136, 0.1); color: var(--green); border-color: var(--green); }
+        .stars { color: var(--gold); margin-bottom: 10px; font-size: 16px; text-shadow: 0 0 5px rgba(212,175,55,0.5); }
+        .product-title { font-size: 24px; font-weight: 900; margin-bottom: 15px; margin-top: 20px; }
+        .product-desc { font-size: 14px; color: #999; margin-bottom: 25px; line-height: 1.8; flex-grow: 1; }
+        
+        .price-area { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #333; padding-top: 20px; margin-top: auto; }
+        .product-price { font-size: 22px; font-weight: 900; color: var(--gold); }
+        .buy-btn { 
+            background: transparent; border: 2px solid var(--gold); color: var(--gold); 
+            padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s; 
+            font-size: 14px; position: relative; overflow: hidden;
+        }
+        .buy-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px rgba(212,175,55,0.4); }
+
+        /* بخش نظرات */
+        .comments-section { margin-top: 80px; background: #0a0a0a; padding: 40px; border-radius: 20px; border: 1px solid #222; }
+        .comments-title { font-size: 28px; color: var(--gold); margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+        .comment { display: flex; gap: 20px; margin-bottom: 25px; border-bottom: 1px solid #1a1a1a; padding-bottom: 20px; transition: 0.3s; }
+        .comment:hover { background: rgba(255,255,255,0.02); border-radius: 10px; padding: 10px; }
+        .avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(45deg, #333, #555); display: flex; justify-content: center; align-items: center; font-weight: 900; color: #fff; font-size: 20px; flex-shrink: 0; }
+        .comment-content h4 { font-size: 18px; margin-bottom: 8px; color: #ddd; }
+        .comment-content p { font-size: 15px; color: #888; line-height: 1.6; }
+        .comment-date { font-size: 12px; color: #555; margin-top: 5px; }
+
+        /* فوتر */
+        .footer { margin-top: 80px; padding: 50px 20px; text-align: center; border-top: 1px solid #222; background: #050505; color: var(--gold); font-size: 20px; font-weight: 900; letter-spacing: 3px; text-shadow: 0 0 15px rgba(212,175,55,0.3); }
+
+        /* نوتیفیکیشن */
+        #toast { 
+            visibility: hidden; min-width: 300px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); 
+            color: #000; text-align: center; border-radius: 10px; padding: 18px; 
+            position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); 
+            font-size: 16px; font-weight: 700; box-shadow: 0 10px 30px rgba(212,175,55,0.4);
+            opacity: 0; transition: opacity 0.4s, bottom 0.4s; 
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+    </style>
+</head>
+<body>
+
+    <!-- صفحه ورود -->
+    <div id="login-screen">
+        <div class="card-login">
+            <div class="logo-box">F</div>
+            <div class="main-name">فاضل</div>
+            <div class="sub-name">پسر ارسلان</div>
+            <button class="login-btn" onclick="enterShop()">ورود به سیستم</button>
+        </div>
+    </div>
+
+    <!-- فروشگاه -->
+    <div id="shop-screen">
+        
+        <!-- نوار بالا -->
+        <div class="top-bar">
+            <h1>سیستم امنیتی فاضل</h1>
+            <div class="cart-icon" onclick="showToast('سبد خرید خالی است!')">
+                🛒 سبد خرید <span id="cart-count">0</span>
+            </div>
+        </div>
+
+        <!-- تیکر خبری -->
+        <div class="news-ticker">
+            <p>⚠️ هشدار: ۱۰ سگ جدید در محله شناسایی شد! | 🛡 سیستم امنیتی ناموس فاضل در حالت آماده‌باش قرار گرفت | 🔥 ارسلان (بابای فاضل) در حال بررسی وضعیت است | 🚫 هرگونه سگ‌بازی ممنوع! | 💰 قیمت کارت‌ها به دلیل افزایش سگ‌ها بالا رفته است!</p>
+        </div>
+
+        <!-- داشبورد -->
+        <div class="dashboard">
+            <div class="stat-box red"><h3>سگ‌های پررو</h3><p id="dog-count">0</p></div>
+            <div class="stat-box gold"><h3>امنیت ناموس</h3><p>MAX</p></div>
+            <div class="stat-box green"><h3>وضعیت ارسلان</h3><p>آنلاین</p></div>
+            <div class="stat-box gold"><h3>فروش امروز</h3><p>۹۹۹ میلیارد</p></div>
+        </div>
+
+        <!-- جستجو -->
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="جستجوی کارت... (مثلاً ناموس یا سگ)" onkeyup="filterCards()">
+        </div>
+
+        <!-- محصولات -->
+        <div class="grid-container" id="productGrid">
+            
+            <div class="product-card">
+                <div class="tag">ویژه</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">کارت ناموس فاضل</h2>
+                <p class="product-desc">نسخه اصلی و اورجینال. قدرت خفه کردن هر سگی که قصد نزدیک شدن دارد. گارانتی مادام‌العمر.</p>
+                <div class="price-area"><span class="product-price">۱۰ میلیارد</span><button class="buy-btn" onclick="buyItem('ناموس فاضل')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag gold-tag">طلایی</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">کارت سگ‌کش فاضل</h2>
+                <p class="product-desc">با فعال‌سازی این کارت، هر سگی که به ناموس فاضل نگاه کنه، خودکار بن میشه!</p>
+                <div class="price-area"><span class="product-price">۵۰ میلیارد</span><button class="buy-btn" onclick="buyItem('سگ‌کش')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">افسانه‌ای</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">اقتدار بابای فاضل</h2>
+                <p class="product-desc">با خرید این کارت، ارسلان شخصاً پشت شماست. هر کسی سگ‌بازی دربیاره با ارسلان طرفه.</p>
+                <div class="price-area"><span class="product-price">۹۹۹ میلیارد</span><button class="buy-btn" onclick="buyItem('اقتدار ارسلان')">خرید</button></div>
+            </div>
+            
+             <div class="product-card">
+                <div class="tag green-tag">محبوب</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">سگ‌شکن ارسلان</h2>
+                <p class="product-desc">وقتی ارسلان میاد، سگ‌ها فرار می‌کنن. با این کارت، شما هم اون هیبت رو پیدا می‌کنید.</p>
+                <div class="price-area"><span class="product-price">۲۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('سگ‌شکن ارسلان')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">ضد سگ</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">سپر ناموس فاضل</h2>
+                <p class="product-desc">این کارت یه سپر انرژی‌ای ایجاد می‌کنه که هر سگ و سگ‌صفت رو دور نگه می‌داره.</p>
+                <div class="price-area"><span class="product-price">۷۵ میلیارد</span><button class="buy-btn" onclick="buyItem('سپر ناموس')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">نهایی</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">کارت پایان سگ‌ها</h2>
+                <p class="product-desc">کارت نهایی. با این کارت، برای همیشه به سگ‌بازی‌ها پایان می‌دید. (غیرقابل قیمت‌گذاری)</p>
+                <div class="price-area"><span class="product-price">نامحدود</span><button class="buy-btn" onclick="buyItem('پایان سگ‌ها')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag gold-tag">طلایی</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">تاج ناموس فاضل</h2>
+                <p class="product-desc">تاجی که فقط برازنده ناموس فاضله. هر کسی این کارت رو داشته باشه، سلطانه.</p>
+                <div class="price-area"><span class="product-price">۱۵۰ میلیارد</span><button class="buy-btn" onclick="buyItem('تاج ناموس')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">ویژه</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">شمشیر عدالت</h2>
+                <p class="product-desc">شمشیری که با یک ضربه هر سگی رو نابود می‌کنه. مخصوص شوالیه‌های ناموس فاضل.</p>
+                <div class="price-area"><span class="product-price">۳۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('شمشیر عدالت')">خرید</button></div>
+            </div>
+
+             <div class="product-card">
+                <div class="tag">ضد سگ</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">سگ‌شکن ارسلان ۲</h2>
+                <p class="product-desc">یه کارت خفن دیگه از ارسلان. مخصوص کسانی که سگ‌ها رو دور می‌خوان.</p>
+                <div class="price-area"><span class="product-price">۲۲۰ میلیارد</span><button class="buy-btn" onclick="buyItem('سگ‌شکن ۲')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag green-tag">محبوب</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">دستکش سگ‌کشی</h2>
+                <p class="product-desc">دستکشی که هر کسی بپوشه، قدرت سگ‌کشی پیدا می‌کنه. مخصوص بچه‌های محل.</p>
+                <div class="price-area"><span class="product-price">۸۰ میلیارد</span><button class="buy-btn" onclick="buyItem('دستکش سگ‌کشی')">خرید</button></div>
+            </div>
+            
+            <div class="product-card">
+                <div class="tag">افسانه‌ای</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">ماسک ناموس فاضل</h2>
+                <p class="product-desc">ماسکی که هویت ناموس فاضل رو پنهان می‌کنه و سگ‌ها رو گمراه می‌کنه.</p>
+                <div class="price-area"><span class="product-price">۵۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('ماسک ناموس')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag gold-tag">طلایی</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">کلید گاوصندوق</h2>
+                <p class="product-desc">کلید گاوصندوقی که ناموس فاضل توش نگهداری میشه. فقط برای افراد خاص.</p>
+                <div class="price-area"><span class="product-price">۷۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('کلید گاوصندوق')">خرید</button></div>
+            </div>
+            
+            <div class="product-card">
+                <div class="tag">ضد سگ</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">تله سگ</h2>
+                <p class="product-desc">تله‌ای که هر سگی رو که نزدیک بشه گیر می‌ندازه. (شوخی)</p>
+                <div class="price-area"><span class="product-price">۴۰ میلیارد</span><button class="buy-btn" onclick="buyItem('تله سگ')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">ویژه</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">سپر ارسلان</h2>
+                <p class="product-desc">سپر مخصوص ارسلان که هر سگی رو از بین می‌بره.</p>
+                <div class="price-area"><span class="product-price">۶۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('سپر ارسلان')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">نهایی</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">کارت نابودی سگ‌ها</h2>
+                <p class="product-desc">این کارت برای همیشه سگ‌ها رو از محله پاک می‌کنه.</p>
+                <div class="price-area"><span class="product-price">نامحدود</span><button class="buy-btn" onclick="buyItem('نابودی سگ‌ها')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag gold-tag">طلایی</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">گردنبند ناموس</h2>
+                <p class="product-desc">گردنبندی که فقط ناموس فاضل می‌تونه بندازه. هر کسی ببینه، می‌فهمه با کی طرفه.</p>
+                <div class="price-area"><span class="product-price">۲۵۰ میلیارد</span><button class="buy-btn" onclick="buyItem('گردنبند ناموس')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag green-tag">محبوب</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">آب‌باریک سگ‌ها</h2>
+                <p class="product-desc">آب‌باریکی که سگ‌ها رو به بیرون از محله هدایت می‌کنه.</p>
+                <div class="price-area"><span class="product-price">۹۰ میلیارد</span><button class="buy-btn" onclick="buyItem('آب‌باریک')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">افسانه‌ای</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">عصای جادویی</h2>
+                <p class="product-desc">عصایی که با یه حرکت، همه سگ‌ها رو غیب می‌کنه.</p>
+                <div class="price-area"><span class="product-price">۶۵۰ میلیارد</span><button class="buy-btn" onclick="buyItem('عصای جادویی')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">ضد سگ</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">سوت سگ‌کش</h2>
+                <p class="product-desc">سوتی که سگ‌ها رو فراری میده. مخصوص شب‌های پر خطر.</p>
+                <div class="price-area"><span class="product-price">۶۰ میلیارد</span><button class="buy-btn" onclick="buyItem('سوت سگ‌کش')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">ویژه</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">کلاه ناموس فاضل</h2>
+                <p class="product-desc">کلاهی که وقتی می‌ذاری، هیچ سگی جرات نمی‌کنه نگاهت کنه.</p>
+                <div class="price-area"><span class="product-price">۱۲۰ میلیارد</span><button class="buy-btn" onclick="buyItem('کلاه ناموس')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag gold-tag">طلایی</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">انگشتر قدرت</h2>
+                <p class="product-desc">انگشتری که بهت قدرت ارسلان رو میده. سگ‌ها فقط ببینن فرار می‌کنن.</p>
+                <div class="price-area"><span class="product-price">۸۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('انگشتر قدرت')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">نهایی</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">کارت سگ‌کشی نهایی</h2>
+                <p class="product-desc">این کارت رو فقط ارسلان شخصاً میده. برای پایان دادن به همه سگ‌بازی‌ها.</p>
+                <div class="price-area"><span class="product-price">نامحدود</span><button class="buy-btn" onclick="buyItem('سگ‌کشی نهایی')">خرید</button></div>
+            </div>
+            
+            <div class="product-card">
+                <div class="tag green-tag">محبوب</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">چاقوی سگ‌کشی</h2>
+                <p class="product-desc">چاقوی کوچیک ولی کارآمد. هر سگی ببینه، خودش رو می‌بازه.</p>
+                <div class="price-area"><span class="product-price">۳۵ میلیارد</span><button class="buy-btn" onclick="buyItem('چاقوی سگ‌کشی')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">افسانه‌ای</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">سنگ جادویی</h2>
+                <p class="product-desc">سنگی که وقتی پرتش کنی، هر سگی که لمسش کنه تبدیل به مجسمه میشه.</p>
+                <div class="price-area"><span class="product-price">۴۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('سنگ جادویی')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">ضد سگ</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">تیر و کمان ارسلان</h2>
+                <p class="product-desc">تیر و کمان مخصوص شکار سگ‌ها. هر تیر دقیقاً به هدف می‌خوره.</p>
+                <div class="price-area"><span class="product-price">۳۵۰ میلیارد</span><button class="buy-btn" onclick="buyItem('تیر و کمان')">خرید</button></div>
+            </div>
+            
+            <div class="product-card">
+                <div class="tag gold-tag">طلایی</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">دستبند طلایی</h2>
+                <p class="product-desc">دستبندی که بهت حس قدرت و امنیت میده. ناموس فاضل همیشه در امانه.</p>
+                <div class="price-area"><span class="product-price">۱۸۰ میلیارد</span><button class="buy-btn" onclick="buyItem('دستبند طلایی')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">ویژه</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">سپر سگ</h2>
+                <p class="product-desc">سپری که از ناموس فاضل در برابر هر حمله‌ای محافظت می‌کنه.</p>
+                <div class="price-area"><span class="product-price">۹۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('سپر سگ')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">نهایی</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">کارت مافیا</h2>
+                <p class="product-desc">این کارت رو فقط رئیس مافیا می‌تونه داشته باشه. ارسلان شخصاً تحویل میده.</p>
+                <div class="price-area"><span class="product-price">نامحدود</span><button class="buy-btn" onclick="buyItem('کارت مافیا')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag green-tag">محبوب</div>
+                <div class="stars">★★★★☆</div>
+                <h2 class="product-title">قفل ناموس فاضل</h2>
+                <p class="product-desc">قفلی که هر کسی نتونه بازش کنه. ناموس فاضل همیشه در امنیت کامل.</p>
+                <div class="price-area"><span class="product-price">۴۵ میلیارد</span><button class="buy-btn" onclick="buyItem('قفل ناموس')">خرید</button></div>
+            </div>
+
+            <div class="product-card">
+                <div class="tag">افسانه‌ای</div>
+                <div class="stars">★★★★★</div>
+                <h2 class="product-title">کارت اژدها</h2>
+                <p class="product-desc">کارتی که یه اژدها رو احضار می‌کنه. اژدها هر سگی رو که ببینه، خاکسترش می‌کنه.</p>
+                <div class="price-area"><span class="product-price">۸۰۰ میلیارد</span><button class="buy-btn" onclick="buyItem('کارت اژدها')">خرید</button></div>
+            </div>
+        </div>
+
+        <!-- بخش نظرات -->
+        <div class="comments-section">
+            <h2 class="comments-title">💬 نظرات خریداران (وضعیت سگ‌ها)</h2>
+            
+            <div class="comment">
+                <div class="avatar">A</div>
+                <div class="comment-content">
+                    <h4>امیر</h4>
+                    <p>عالی بود! بعد از خرید کارت ناموس فاضل، دیگه هیچ سگی جرات نکرد بهم نگاه کنه!</p>
+                    <span class="comment-date">۲ روز پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">R</div>
+                <div class="comment-content">
+                    <h4>رضا</h4>
+                    <p>کارت سگ‌کش فاضل واقعاً کار می‌کنه؟ من خریدم و الان سگ‌های محله فرار می‌کنن! 😂</p>
+                    <span class="comment-date">۳ روز پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">M</div>
+                <div class="comment-content">
+                    <h4>مهدی</h4>
+                    <p>اقتدار بابای فاضل یه چیز دیگه‌ست. ارسلان خودش جواب داد!</p>
+                    <span class="comment-date">۵ روز پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">S</div>
+                <div class="comment-content">
+                    <h4>سعید</h4>
+                    <p>بهترین خرید عمرم. سپر ناموس فاضل واقعاً سپر محکمیه!</p>
+                    <span class="comment-date">۱ هفته پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">N</div>
+                <div class="comment-content">
+                    <h4>نیما</h4>
+                    <p>من کارت سگ‌کشی نهایی رو خریدم، الان کل محله آرومه! دم ارسلان گرم!</p>
+                    <span class="comment-date">۲ هفته پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">H</div>
+                <div class="comment-content">
+                    <h4>حسین</h4>
+                    <p>کارت تاج ناموس رو خریدم، همش حس می‌کنم یه پادشاهم! پیشنهاد می‌کنم.</p>
+                    <span class="comment-date">۳ هفته پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">F</div>
+                <div class="comment-content">
+                    <h4>فرزاد</h4>
+                    <p>تیر و کمان ارسلان عالیه. دیشب دو تا سگ رو فراری دادم!</p>
+                    <span class="comment-date">۴ هفته پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">K</div>
+                <div class="comment-content">
+                    <h4>کیان</h4>
+                    <p>دستکش سگ‌کشی خیلی خوبه. فقط یه کم بوی بد میده. ولی کارش رو بلده!</p>
+                    <span class="comment-date">۱ ماه پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">B</div>
+                <div class="comment-content">
+                    <h4>بهرام</h4>
+                    <p>سپر ارسلان واقعاً کار می‌کنه. یه سگه اومد سمتم، سپر فعال شد و فرار کرد!</p>
+                    <span class="comment-date">۱ ماه پیش</span>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="avatar">Z</div>
+                <div class="comment-content">
+                    <h4>زهرا (خواهر فاضل)</h4>
+                    <p>من به عنوان خواهر فاضل تأیید می‌کنم که این کارت‌ها عالی هستن. ارسلان همیشه حواسش به ما هست.</p>
+                    <span class="comment-date">۲ ماه پیش</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- فوتر -->
+    <div class="footer">
+        ارسلان | بابای فاضل
+    </div>
+
+    <!-- نوتیفیکیشن -->
+    <div id="toast">کارت با موفقیت به سبد خرید اضافه شد!</div>
+
+    <!-- جاوااسکریپت -->
+    <script>
+        let cart = 0;
+
+        function enterShop() {
+            document.getElementById('login-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('shop-screen').style.display = 'block';
+            }, 500);
+        }
+
+        setInterval(() => {
+            let dogEl = document.getElementById('dog-count');
+            if (dogEl) {
+                let current = parseInt(dogEl.innerText.replace(/,/g, '')) || 0;
+                dogEl.innerText = (current + Math.floor(Math.random() * 3)).toLocaleString('fa-IR');
+            }
+        }, 3000);
+
+        function showToast(message) {
+            let toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        function buyItem(itemName) {
+            cart++;
+            document.getElementById('cart-count').innerText = cart;
+            showToast('کارت «' + itemName + '» به سبد خرید اضافه شد!');
+        }
+
+        function filterCards() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.querySelectorAll('.product-card');
+
+            cards.forEach(card => {
+                let title = card.querySelector('.product-title').innerText.toLowerCase();
+                let desc = card.querySelector('.product-desc').innerText.toLowerCase();
+                
+                if (title.includes(input) || desc.includes(input)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
